@@ -11,6 +11,7 @@ private:
 private:
     ~StringValue()
     {
+        std::cout << "destroyed: " << _stringarr << std::endl;
         delete _stringarr;
     }
 public:
@@ -29,29 +30,24 @@ class MyString{
     StringValue* _value;
 public:
 // Üres Ctor
-    MyString(){
-        _value = new StringValue("");
-        _value->addCnt();
-    }
+    MyString();
 // Const Char* Ctor
-     explicit MyString(const char* cstring){
-        _value = new StringValue (cstring);
-        _value->addCnt();
-    }
+    MyString(const char* cstring);
+    MyString(const MyString& otherMyString);
 //Dtor
-    ~MyString(){
-        _value->removeCnt();
-    }
+    ~MyString();
+    MyString& operator= (const char* carr);
+    MyString& operator= (MyString& otherMyString);
+    MyString operator+ (const MyString& otherMyString);
+    MyString& operator+=(MyString& otherMyString);
+    MyString& operator+(char c);
+    MyString& operator+=(char c);
+    char operator[](int i);
+    const int lenght() const;
 // Kiirás
 //DEBUG FUNCTION EDIT BEFORE
-    inline friend std::ostream& operator<< (std::ostream& os, const MyString& mystring){
-        os << **mystring._value << " "<<mystring._value->showCnt();
-        return os;
-        };
+    friend std::ostream& operator<< (std::ostream& os, const MyString& mystring);
 //Beolvasás
-    inline friend std::istream& operator>> (std::istream& is, MyString& mystring){
-        is >> **mystring._value;
-        return is;
-        };
+    friend std::istream& operator>> (std::istream& is, MyString& mystring);
 };
 #endif // MYSTRING

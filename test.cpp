@@ -1,7 +1,9 @@
 #include "mystring.h"
 #include <iostream>
 int main(){
-    MyString a ("Hello World");
-    std::cout << a;
+    MyString x = "hello";
+    MyString y = " World";
+ //   y[0] = 'c';
+    std::cout <<( x + y)<< std::endl;     /* hello */   /* cello */
     return 0;
 }
