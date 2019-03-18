@@ -24,6 +24,9 @@ public:
     inline char* operator*(){
         return _stringarr;
     };
+    char* getStringArr(){
+        return _stringarr;
+    }
 };
 
 class MyString{
@@ -34,15 +37,19 @@ public:
 // Const Char* Ctor
     MyString(const char* cstring);
     MyString(const MyString& otherMyString);
+    MyString(MyString && otherMyString) noexcept;
 //Dtor
     ~MyString();
+//
     MyString& operator= (const char* carr);
     MyString& operator= (MyString& otherMyString);
-    MyString operator+ (const MyString& otherMyString);
+    MyString& operator= (MyString && otherMyString) noexcept;
+    MyString operator+ (const MyString& otherMyString) const;
     MyString& operator+=(MyString& otherMyString);
-    MyString& operator+(char c);
+    MyString operator+ (char c) const;
     MyString& operator+=(char c);
-    char operator[](int i);
+    char& operator[](int i);
+    char operator[] (int i) const;
     const int lenght() const;
 // Kiirás
 //DEBUG FUNCTION EDIT BEFORE

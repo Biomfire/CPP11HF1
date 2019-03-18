@@ -29,6 +29,10 @@ MyString::MyString(const MyString& otherMyString){
     this->_value = otherMyString._value;
     _value->addCnt();
 }
+MyString::MyString(MyString && otherMyString) noexcept{
+    _value = otherMyString._value;
+    otherMyString._value = nullptr;
+}
 MyString::~MyString(){
     _value->removeCnt();
 }
@@ -43,21 +47,39 @@ MyString& MyString::operator= (MyString& otherMyString){
     _value->addCnt();
     return *this;
 }
-MyString MyString::operator+ (const MyString& otherMyString){
+MyString& MyString::operator= (MyString && otherMyString) noexcept{
+    if(this != &otherMyString){
+        _value = otherMyString._value;
+        otherMyString._value = nullptr;
+    }
+    return *this;
+}
+MyString MyString::operator+ (const MyString& otherMyString) const{
     MyString returnstring(new char[lenght()+otherMyString.lenght()]());
     strcat(**returnstring._value, **(this->_value));
     strcat(**returnstring._value, **otherMyString._value);
     return returnstring;
 }
 MyString& MyString::operator+=(MyString& otherMyString){
+    MyString tmp (*this+otherMyString);
+    _value->removeCnt();
+   _value = tmp._value;
+   return *this;
 }
-MyString& MyString::operator+(char c){
-
+MyString MyString::operator+(char c) const {
+    MyString returnstring(new char[lenght()+1]());
+    strcpy(**returnstring._value, **(this->_value));
+    returnstring._value->getStringArr()[returnstring.lenght()] = c;
+    returnstring._value->getStringArr()[returnstring.lenght()+1] = '\0';
+    return returnstring;
 }
 MyString& MyString::operator+=(char c){
-
+    _value->removeCnt();
+    _value = MyString(*this+c)._value;
+    return *this;
 }
-char MyString::operator[](int i){
+char& MyString::operator[](int i){
+    return this->_value->getStringArr()[i];
 
 }
 //#########Functions ###############################################
