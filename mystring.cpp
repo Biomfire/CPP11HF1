@@ -5,13 +5,13 @@ StringValue
 StringValue::StringValue(const char* cstring){
         _stringarr = new char[strlen(cstring)+1];
         strcpy(_stringarr, cstring);
-};
+}
 void StringValue::removeCnt(){
     --_refCounter;
     if(_refCounter == 0){
         delete this;
     }
-};
+}
 
 /*##############################
 MyString
@@ -58,10 +58,12 @@ MyString& MyString::operator= (MyString && otherMyString) noexcept{
     return *this;
 }
 MyString MyString::operator+ (const MyString& otherMyString) const{
-    char tmp [lenght()+otherMyString.lenght()+1];
+    char* tmp = new char[lenght()+otherMyString.lenght()+1];
     strcpy(tmp, this->_value->getStringArr());
     strcat(tmp, otherMyString._value->getStringArr());
-    return MyString(tmp);
+    MyString returnstring(tmp);
+    delete[] tmp;
+    return returnstring;
 }
 MyString& MyString::operator+=(MyString& otherMyString){
     MyString tmp ((*this)+otherMyString);
@@ -71,11 +73,13 @@ MyString& MyString::operator+=(MyString& otherMyString){
    return *this;
 }
 MyString MyString::operator+(char c) const {
-    char tmp[lenght()+2];
+    char* tmp = new char[lenght()+2];
     strcpy(tmp, this->_value->getStringArr());
     tmp[lenght()] = c;
     tmp[lenght()+1] = '\0';
-    return MyString(tmp);
+    MyString returnstring (tmp);
+    delete [] tmp;
+    return returnstring;
 }
 MyString& MyString::operator+=(char c){
     MyString tmp (*this+c);
