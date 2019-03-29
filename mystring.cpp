@@ -3,7 +3,7 @@
 StringValue
 ############################*/
 StringValue::StringValue(const char* cstring){
-        _stringarr = new char[strlen(cstring)];
+        _stringarr = new char[strlen(cstring)+1];
         strcpy(_stringarr, cstring);
 };
 void StringValue::removeCnt(){
@@ -55,10 +55,10 @@ MyString& MyString::operator= (MyString && otherMyString) noexcept{
     return *this;
 }
 MyString MyString::operator+ (const MyString& otherMyString) const{
-    MyString returnstring(new char[lenght()+otherMyString.lenght()]());
-    strcat(**returnstring._value, **(this->_value));
-    strcat(**returnstring._value, **otherMyString._value);
-    return returnstring;
+    char tmp [lenght()+otherMyString.lenght()+1];
+    strcpy(tmp, **(this->_value));
+    strcat(tmp, **otherMyString._value);
+    return MyString(tmp);
 }
 MyString& MyString::operator+=(MyString& otherMyString){
     MyString tmp (*this+otherMyString);

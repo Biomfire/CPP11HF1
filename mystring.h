@@ -11,8 +11,7 @@ private:
 private:
     ~StringValue()
     {
-        std::cout << "destroyed: " << _stringarr << std::endl;
-        delete _stringarr;
+        delete[] _stringarr;
     }
 public:
 
