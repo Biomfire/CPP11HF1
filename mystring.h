@@ -11,7 +11,9 @@ private:
 public:
     ~StringValue()
     {
-        delete[] _stringarr;
+        if(_stringarr != nullptr){
+            delete[] _stringarr;
+        }
     }
 public:
 
@@ -20,9 +22,6 @@ public:
     void removeCnt();
     // DEBUG FUNCTION
     int showCnt(){return _refCounter;};
-    inline char* operator*(){
-        return _stringarr;
-    };
     char* getStringArr(){
         return _stringarr;
     }

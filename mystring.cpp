@@ -18,28 +18,24 @@ MyString
 ###############################*/
 //######### Constructor/Deconstructor ###############################
 MyString::MyString(){
-    std::cout<<"ctor ";
     _value = new StringValue("");
     _value->addCnt();
 }
 MyString::MyString(const char* cstring){
-    std::cout<<"strctor ";
     _value = new StringValue (cstring);
     _value->addCnt();
 }
 MyString::MyString(const MyString& otherMyString){
-    std::cout<<"copy ctor ";
     this->_value = otherMyString._value;
     _value->addCnt();
 }
 MyString::MyString(MyString && otherMyString) noexcept{
-    std::cout<<"move ctor ";
     _value = otherMyString._value;
     otherMyString._value = nullptr;
 }
 MyString::~MyString(){
-    std::cout<<"dtor ";
-    _value->removeCnt();
+    if(_value != nullptr)
+        _value->removeCnt();
 }
 //######### Operators ###############################################
 MyString& MyString::operator= (const char* carr){
@@ -54,6 +50,8 @@ MyString& MyString::operator= (MyString& otherMyString){
 }
 MyString& MyString::operator= (MyString && otherMyString) noexcept{
     if(this != &otherMyString){
+        if(_value != nullptr)
+            _value->removeCnt();
         _value = otherMyString._value;
         otherMyString._value = nullptr;
     }
@@ -61,8 +59,8 @@ MyString& MyString::operator= (MyString && otherMyString) noexcept{
 }
 MyString MyString::operator+ (const MyString& otherMyString) const{
     char tmp [lenght()+otherMyString.lenght()+1];
-    strcpy(tmp, **(this->_value));
-    strcat(tmp, **otherMyString._value);
+    strcpy(tmp, this->_value->getStringArr());
+    strcat(tmp, otherMyString._value->getStringArr());
     return MyString(tmp);
 }
 MyString& MyString::operator+=(MyString& otherMyString){
@@ -70,15 +68,14 @@ MyString& MyString::operator+=(MyString& otherMyString){
     _value->removeCnt();
    _value = tmp._value;
    _value->addCnt();
-    std::cout << tmp;
    return *this;
 }
 MyString MyString::operator+(char c) const {
-    MyString returnstring(new char[lenght()+1]());
-    strcpy(**returnstring._value, **(this->_value));
-    returnstring._value->getStringArr()[returnstring.lenght()] = c;
-    returnstring._value->getStringArr()[returnstring.lenght()+1] = '\0';
-    return returnstring;
+    char tmp[lenght()+2];
+    strcpy(tmp, this->_value->getStringArr());
+    tmp[lenght()] = c;
+    tmp[lenght()+1] = '\0';
+    return MyString(tmp);
 }
 MyString& MyString::operator+=(char c){
     MyString tmp (*this+c);
@@ -87,20 +84,40 @@ MyString& MyString::operator+=(char c){
     _value->addCnt();
     return *this;
 }
-char& MyString::operator[](int i){
+char MyString::operator[](int i) const{
     return this->_value->getStringArr()[i];
-
+}
+char& MyString::operator[](int i){
+    MyString newmystring(*this);
+    _value->removeCnt();
+    _value = newmystring._value;
+    _value->addCnt();
+    return _value->getStringArr()[i];
 }
 //#########Functions ###############################################
 const int MyString::lenght ()const{
-    return strlen(**_value);
+    return strlen(_value->getStringArr());
 }
 //######### Friend Functions / Write Out, Read In ##################
-std::ostream& operator<< (std::ostream& os, const MyString& mystring){
-    os << **mystring._value << " "<<mystring._value->showCnt() << " " ;
-    return os;
-}
-std::istream& operator>> (std::istream& is, MyString& mystring){
-    is >> **mystring._value;
+std::istream& operator>>(std::istream& is, MyString& instring){
+    size_t size = 10;
+    char* tmp = new char[size]();
+    char c;
+    for(size_t i = 0;(c = getchar()) != '\n' && c != EOF; i++){
+        if(i+1 == size){
+            char* ntmp = new char [size*=2];
+            strcpy(ntmp, tmp);
+            delete[] tmp;
+            tmp = ntmp;
+        }
+        tmp[i] = c;
+        tmp[i+1] = '\0';
+    }
+    instring = std::move(MyString(tmp));
+    delete[] tmp;
     return is;
+}
+std::ostream& operator<< (std::ostream& os, const MyString& mystring){
+    os << mystring._value->getStringArr() << " "<<mystring._value->showCnt() << " " ;
+    return os;
 }
