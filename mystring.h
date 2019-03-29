@@ -8,7 +8,7 @@ private:
     int _refCounter = 0;
     char* _stringarr;
 //Member Functions
-private:
+public:
     ~StringValue()
     {
         delete[] _stringarr;

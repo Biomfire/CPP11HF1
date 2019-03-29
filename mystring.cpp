@@ -18,22 +18,27 @@ MyString
 ###############################*/
 //######### Constructor/Deconstructor ###############################
 MyString::MyString(){
+    std::cout<<"ctor ";
     _value = new StringValue("");
     _value->addCnt();
 }
 MyString::MyString(const char* cstring){
+    std::cout<<"strctor ";
     _value = new StringValue (cstring);
     _value->addCnt();
 }
 MyString::MyString(const MyString& otherMyString){
+    std::cout<<"copy ctor ";
     this->_value = otherMyString._value;
     _value->addCnt();
 }
 MyString::MyString(MyString && otherMyString) noexcept{
+    std::cout<<"move ctor ";
     _value = otherMyString._value;
     otherMyString._value = nullptr;
 }
 MyString::~MyString(){
+    std::cout<<"dtor ";
     _value->removeCnt();
 }
 //######### Operators ###############################################
@@ -61,9 +66,11 @@ MyString MyString::operator+ (const MyString& otherMyString) const{
     return MyString(tmp);
 }
 MyString& MyString::operator+=(MyString& otherMyString){
-    MyString tmp (*this+otherMyString);
+    MyString tmp ((*this)+otherMyString);
     _value->removeCnt();
    _value = tmp._value;
+   _value->addCnt();
+    std::cout << tmp;
    return *this;
 }
 MyString MyString::operator+(char c) const {
@@ -90,7 +97,7 @@ const int MyString::lenght ()const{
 }
 //######### Friend Functions / Write Out, Read In ##################
 std::ostream& operator<< (std::ostream& os, const MyString& mystring){
-    os << **mystring._value << " "<<mystring._value->showCnt();
+    os << **mystring._value << " "<<mystring._value->showCnt() << " " ;
     return os;
 }
 std::istream& operator>> (std::istream& is, MyString& mystring){

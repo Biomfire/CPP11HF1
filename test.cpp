@@ -5,6 +5,8 @@ int main(){
     MyString y = " World";
  //   y[0] = 'c';
     //std::cout <<( x )<< std::endl; /* hello */   /* cello */
-    std::cout << (x+y)<<std::endl;
+ //   std::cout << (x+y)<<std::endl;
+    x+=y;
+    std::cout<<(x);
     return 0;
 }
