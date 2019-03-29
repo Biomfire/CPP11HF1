@@ -74,8 +74,10 @@ MyString MyString::operator+(char c) const {
     return returnstring;
 }
 MyString& MyString::operator+=(char c){
+    MyString tmp (*this+c);
     _value->removeCnt();
-    _value = MyString(*this+c)._value;
+    _value = tmp._value;
+    _value->addCnt();
     return *this;
 }
 char& MyString::operator[](int i){
