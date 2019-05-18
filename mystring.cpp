@@ -68,9 +68,7 @@ MyString MyString::operator+ (const MyString& otherMyString) const{
 }
 MyString& MyString::operator+=(MyString& otherMyString){
     MyString tmp ((*this)+otherMyString);
-    _value->removeCnt();
-   _value = tmp._value;
-   _value->addCnt();
+    this->operator=(tmp);
    return *this;
 }
 MyString MyString::operator+(char c) const {
