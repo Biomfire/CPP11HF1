@@ -92,10 +92,12 @@ char MyString::operator[](int i) const{
     return this->_value->getStringArr()[i];
 }
 char& MyString::operator[](int i){
-    MyString newmystring(*this);
-    _value->removeCnt();
-    _value = newmystring._value;
-    _value->addCnt();
+    if(_value->showCnt() >1 ) {
+        MyString newmystring(*this);
+        _value->removeCnt();
+        _value = newmystring._value;
+        _value->addCnt();
+    }
     return _value->getStringArr()[i];
 }
 //#########Functions ###############################################
