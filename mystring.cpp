@@ -8,9 +8,6 @@ StringValue::StringValue(const char* cstring){
 }
 void StringValue::removeCnt(){
     --_refCounter;
-    if(_refCounter == 0){
-        delete this;
-    }
 }
 
 /*##############################
@@ -34,8 +31,12 @@ MyString::MyString(MyString && otherMyString) noexcept{
     otherMyString._value = nullptr;
 }
 MyString::~MyString(){
-    if(_value != nullptr)
+    if(_value != nullptr) {
         _value->removeCnt();
+        if(_value->showCnt() == 0){
+            delete _value;
+        }
+    }
 }
 //######### Operators ###############################################
 MyString& MyString::operator= (const char* carr){
